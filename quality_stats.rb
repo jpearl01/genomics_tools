@@ -2,10 +2,8 @@
 
 require 'bio'
 
-#fq = Bio::FlatFile.auto('filtered_subreads.fastq')
-#fr = fq.first
-#fr.qualities.inject{|sum, e1| sum+e1}.to_f / fr.qualities.size
-#fr.qualities.reduce(:+).to_f / fr.qualities.size
+#This file accepts a fastq formatted file and returns the average, min, and max
+#of the average quality of each read.
 
 
 totalReads  = 0
@@ -17,10 +15,13 @@ maxQual     = 0
 minRead = 20000
 maxRead = 0
 
-qual = Bio::FlatFile.auto('/home/pacbio/Xf10_11_25_29_082212_59/Xf10.qual')
+#This better be a fastq file
+qual = Bio::FlatFile.auto(ARGV[0])
 qual.each do |q|
-  fq = q.to_s.split.map(&:to_i)
-  currQual = fq.reduce(:+).to_f / fq.size
+  currQual = q.qualities.reduce(:+).to_f / q.qualities.size
+
+#  fq = q.to_s.split.map(&:to_i)
+#  currQual = fq.reduce(:+).to_f / fq.size
   totalQual += currQual
   totalReads += 1
 
@@ -40,3 +41,7 @@ puts "Minimum Read Quality:   #{minQual}"
 puts "Maximum Read Quality:   #{maxQual}"
 puts "Minimum Read Length:    #{minRead}"
 puts "Maximum Read Length:    #{maxRead}"
+
+
+#I don't know what I was doing here
+#  fr.qualities.inject{|sum, e1| sum+e1}.to_f / fr.qualities.size
