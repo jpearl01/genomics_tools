@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+require 'bio'
+require 'trollop'
+
+opts = Trollop::options do
+  opt :f,   "Sequence file (fasta or fastq)", :type => :string, :required => true
+  opt :otu, "OTU to extract",                 :type => :string, :required => true
+  opt :u,   "UP file from uclust",            :type => :string, :required => true
+end
+
+seqs = Bio::FlatFile.auto(opts.f)
+otu = opt.otu
+up_file = File.open(opt.u)
+
+otu_seqs = []
+
+up_file.each do |l|
+  otu_seqs.push(l.split[0]) if /#{otu}\s+/.match(l)
+end
+puts otu_seqs[1..5]

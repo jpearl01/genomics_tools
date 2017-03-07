@@ -8,10 +8,10 @@ require 'bio'
 
 #This better be a fastq file
 qual = Bio::FlatFile.auto(ARGV[0])
-abort("Must be a fastq file") unless qual.dbclass=="Bio::Fastq"
+#abort("Must be a fastq file") unless qual.dbclass=="Bio::Fastq"
 qual.each do |q|
 
   currQual = q.qualities.reduce(:+).to_f / q.qualities.size
-  puts q.definition + " " +currQual.to_s
+  puts q.definition + "\t" +currQual.to_s
 
 end
